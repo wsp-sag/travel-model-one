@@ -38,7 +38,7 @@ public final class MatrixType implements Serializable {
     public static final MatrixType TPPLUS = new MatrixType("TPPlus", 6);
     public static final MatrixType TRANSCAD = new MatrixType("Transcad", 7);
     public static final MatrixType TPPLUS32 = new MatrixType("TPPlus32", 8); // TODO: remove once 32bit reader DLL is no longer supported 
-    
+    public static final MatrixType OMX = new MatrixType("OMX", 9);
 
     private String id;
     private int hashValue;
@@ -91,13 +91,14 @@ public final class MatrixType implements Serializable {
         if (TPPLUS.toString().equalsIgnoreCase(matrixTypeName)) return TPPLUS;
         if (TRANSCAD.toString().equalsIgnoreCase(matrixTypeName)) return TRANSCAD;
         if (TPPLUS32.toString().equalsIgnoreCase(matrixTypeName)) return TPPLUS32; // TODO: remove once 32bit reader DLL is no longer supported 
-
+        if (OMX.toString().equalsIgnoreCase(matrixTypeName)) return OMX;
+        
         logger.error("Matrix type "+matrixTypeName+" is not defined");
         return null;
     }
 
     public static MatrixType[] values() {
-        return new MatrixType[]{BINARY,ZIP,CSV,EMME2,D311,TPPLUS,TRANSCAD,TPPLUS32}; // TODO: remove once 32bit reader DLL is no longer supported 
+        return new MatrixType[]{BINARY,ZIP,CSV,EMME2,D311,TPPLUS,TRANSCAD,TPPLUS32,OMX}; // TODO: remove once 32bit reader DLL is no longer supported 
 
     }
 }

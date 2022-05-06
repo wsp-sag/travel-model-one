@@ -88,6 +88,10 @@ public abstract class MatrixWriter {
                 throw new RuntimeException("TRANSCAD not supported");
             }
         else
+            if  (type.equals(MatrixType.OMX)) {
+            	writer = new OMXMatrixWriter( file );
+            }
+        else
         if (type.equals(MatrixType.CSV)) {
             writer = new CSVMatrixWriter( file );
         }

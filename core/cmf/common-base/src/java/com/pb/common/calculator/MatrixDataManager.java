@@ -669,6 +669,9 @@ public class MatrixDataManager implements Serializable {
         } else if (matrixEntry.format.equalsIgnoreCase("transcad")) {
             MatrixReader mr = MatrixReader.createReader(MatrixType.TRANSCAD, new File(fileName));
             matrix = mr.readMatrix(matrixEntry.matrixName);
+        } else if (matrixEntry.format.equalsIgnoreCase("omx")) {
+            MatrixReader mr = MatrixReader.createReader(MatrixType.OMX, new File(fileName));
+            matrix = mr.readMatrix(matrixEntry.matrixName);
         } else {
             throw new RuntimeException("unsupported matrix type: " + matrixEntry.format);
         }

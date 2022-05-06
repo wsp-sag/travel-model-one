@@ -38,7 +38,8 @@ public class MatrixException extends RuntimeException {
     public static final String ERROR_WRITING_FILE= "Error while writing to file";
     public static final String MATRIX_DOES_NOT_EXIST = "Matrix does not exist";
     public static final String INVALID_FORMAT = "Invalid format";
-    public static final String INVALID_TABLE_NAME = "Matrix does not exist with name"; 
+    public static final String INVALID_TABLE_NAME = "Matrix does not exist with name";
+    public static final String FILE_CANNOT_BE_OPENED = "Cannot open matrix";
 
     public MatrixException() {
         super();
