@@ -1,0 +1,129 @@
+---
+title: "Find UEC Differences"
+output: html_notebook
+---
+
+# Overhead
+```{r overhead, include = FALSE}
+packages_vector <- c("tidyverse",
+                     "readxl")
+
+need_to_install <- packages_vector[!(packages_vector %in% installed.packages()[,"Package"])]
+
+if (length(need_to_install)) install.packages(need_to_install)
+
+for (package in packages_vector) {
+  library(package, character.only = TRUE)
+}
+
+```
+
+# Remote I/O
+```{r remote-io}
+uec_dir <- "../../model-files/model/"
+
+uec_filename <- paste0(uec_dir, "ModeChoice-for-script.xlsx")
+
+output_file_name <- paste0("uec-differences.csv")
+```
+
+# Parameters
+```{r parameters}
+
+```
+
+
+# Data Reads
+```{r read}
+excel_df <- tibble()
+sheets <- c("Work", 
+            "Work-deprecated", 
+            "University-deprecated", 
+            "School-deprecated", 
+            "Escort-deprecated",
+            "Shopping-deprecated",
+            "EatOut-deprecated")
+
+for (sheet in sheets) {
+  
+  number_alts <- if_else(sheet == "Work", 9L, 21L)
+  skip_lines <- if_else(sheet == "Work", 8L, 10L)
+  
+  df <- read_excel(uec_filename, 
+                      sheet = sheet, 
+                      skip = skip_lines, 
+                      col_names = c("row_number", "token", "description", "filter", "formula", "index", sprintf("Alt%0d", seq(1,number_alts)))) %>%
+    mutate(sheet_name = sheet)
+  
+  excel_df <- bind_rows(excel_df, df)
+  
+}
+
+```
+
+# Methods
+```{r methods}
+make_uec <- function(input_df, template_name, subject_name, start_with_name) {
+  
+  join_work_df <- filter(input_df, sheet_name == template_name) %>%
+    select(work_row = row_number, token, description, filter, formula)
+  
+  join_df <- filter(input_df, sheet_name == subject_name) %>%
+    select(subject_row = row_number, token, description, filter, formula)
+  
+  working_df <- left_join(join_df, join_work_df, by = c("token", "filter", "description", "formula")) %>%
+    mutate(matched = !is.na(work_row))
+  
+  different_df <- working_df %>%
+    filter(!matched)
+  
+  constants_df <- different_df %>%
+    select(subject_row, token, filter, description, update_formula = formula) %>%
+    left_join(., join_work_df, by = c("token", "filter", "description")) %>%
+    select(token, description, filter, formula, update_formula)
+  
+  out_df <- filter(excel_df, sheet_name == start_with_name) %>%
+    select(row_number, token, description, filter, formula, index) %>%
+    left_join(., constants_df, by = c("token", "filter", "description", "formula")) %>%
+    mutate(formula = if_else(is.na(update_formula), formula, update_formula)) %>%
+    select(-update_formula) %>%
+    replace(is.na(.), "")
+  
+  return(list("differences" = different_df, "uec" = out_df))
+  
+}
+
+```
+
+
+START HERE: debug eatout
+
+# Reductions
+```{r reductions}
+univ_list <- make_uec(excel_df, "Work-deprecated", "University-deprecated", "Work")
+check_univ_df <- univ_list$differences
+
+school_list <- make_uec(excel_df, "Work-deprecated", "School-deprecated", "Work")
+check_school_df <- school_list$differences
+
+escort_list <- make_uec(excel_df, "Work-deprecated", "Escort-deprecated", "Work")
+check_escort_df <- escort_list$differences
+
+shopping_list <- make_uec(excel_df, "Work-deprecated", "Shopping-deprecated", "Work")
+check_shopping_df <- shopping_list$differences
+
+eatout_list <- make_uec(excel_df, "Shopping-deprecated", "EatOut-deprecated", "Shopping")
+check_eatout_df <- eatout_list$differences
+
+df <- eatout_list$uec
+```
+
+# Write to disk
+```{r write}
+write_csv(univ_list$uec, file = "update-university.csv")
+write_csv(school_list$uec, file = "update-school.csv")
+write_csv(escort_list$uec, file = "update-escort.csv")
+write_csv(shopping_list$uec, file = "update-shopping.csv")
+write_csv(eatout_list$uec, file = "update-eatout.csv")
+```
+
