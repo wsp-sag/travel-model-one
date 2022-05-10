@@ -285,12 +285,12 @@ row_number,token,description,filter,formula,index
 284,,Taxi - Alternative-specific constant - Auto sufficient - Joint Tours,tourCategoryJoint*autoSufficientHh,-11.709876913156799,
 285,,Walk to Transit - to CBD dummy,cbdDummy,0,
 286,,Drive to Transit - to CBD dummy,cbdDummy,0,
-287,,Walk to Transit - to San Francisco dummy,destCounty==1,1.05,
-288,,Drive to Transit - to San Francisco dummy,destCounty==1,0.35000000000000003,
+287,,Walk to Transit - to San Francisco dummy,destCounty==1,1.2250000000000001,
+288,,Drive to Transit - to San Francisco dummy,destCounty==1,1.05,
 289,,Walk to Transit - Within SF dummy,(origCounty==1)*(destCounty==1),0.35,
 290,,Drive to Transit - Within SF dummy,(origCounty==1)*(destCounty==1),0.35,
 291,,Walk to Transit - from San Francisco dummy,origCounty==1,8.7499999999999994E-2,
-292,,Drive to Transit - from San Francisco dummy,origCounty==1,1.3125000000000002,
+292,,Drive to Transit - from San Francisco dummy,origCounty==1,1.2250000000000001,
 293,,Drive to Transit - distance penalty,,"min(0,c_drvtrn_distpen_0*(1-DIST/c_drvtrn_distpen_max))",od
 294,,Walk not available for long distances,DISTWALK>3,1,od
 295,,Bike not available for long distances,DISTBIKE>8,1,od
