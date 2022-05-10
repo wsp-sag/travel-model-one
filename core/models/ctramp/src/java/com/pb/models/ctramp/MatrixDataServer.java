@@ -142,7 +142,10 @@ public class MatrixDataServer implements MatrixDataServerIf, Serializable {
         } else if (matrixEntry.format.equalsIgnoreCase("transcad")) {
         	MatrixReader mr = MatrixReader.createReader(MatrixType.TRANSCAD, new File(fileName));
             matrix = mr.readMatrix(matrixEntry.matrixName);
-        } else {
+        } else if (matrixEntry.format.equalsIgnoreCase("omx")) {
+            MatrixReader mr = MatrixReader.createReader(MatrixType.OMX, new File(fileName));
+            matrix = mr.readMatrix(matrixEntry.matrixName);
+         } else {
             throw new RuntimeException("unsupported matrix type: " + matrixEntry.format);
         }
 
@@ -152,7 +155,7 @@ public class MatrixDataServer implements MatrixDataServerIf, Serializable {
 
         return matrix;
     }
-
+	
 
 
     public void start32BitMatrixIoServer( MatrixType mType ) {
