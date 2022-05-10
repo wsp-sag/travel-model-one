@@ -37,17 +37,22 @@ output_file_name <- paste0("uec-differences.csv")
 ```{r read}
 excel_df <- tibble()
 sheets <- c("Work", 
+            "Shopping",
             "Work-deprecated", 
             "University-deprecated", 
             "School-deprecated", 
             "Escort-deprecated",
             "Shopping-deprecated",
-            "EatOut-deprecated")
+            "EatOut-deprecated",
+            "OthMaint-deprecated",
+            "Social-deprecated",
+            "OthDiscr-deprecated",
+            "WorkBased-deprecated")
 
 for (sheet in sheets) {
   
-  number_alts <- if_else(sheet == "Work", 9L, 21L)
-  skip_lines <- if_else(sheet == "Work", 8L, 10L)
+  number_alts <- if_else(str_detect(sheet, "deprecated"), 21L, 9L)
+  skip_lines <- if_else(str_detect(sheet, "deprecated"), 10L, 8L)
   
   df <- read_excel(uec_filename, 
                       sheet = sheet, 
@@ -59,27 +64,33 @@ for (sheet in sheets) {
   
 }
 
+remove(sheets, df, number_alts, skip_lines)
 ```
 
 # Methods
 ```{r methods}
 make_uec <- function(input_df, template_name, subject_name, start_with_name) {
   
-  join_work_df <- filter(input_df, sheet_name == template_name) %>%
-    select(work_row = row_number, token, description, filter, formula)
+  input_df <- excel_df
+  template_name <- "Shopping-deprecated"
+  subject_name <- "WorkBased-deprecated"
+  start_with_name <- "Shopping"
+  
+  join_ref_df <- filter(input_df, sheet_name == template_name) %>%
+    select(ref_row = row_number, token, description, filter, formula)
   
   join_df <- filter(input_df, sheet_name == subject_name) %>%
     select(subject_row = row_number, token, description, filter, formula)
   
-  working_df <- left_join(join_df, join_work_df, by = c("token", "filter", "description", "formula")) %>%
-    mutate(matched = !is.na(work_row))
+  working_df <- left_join(join_df, join_ref_df, by = c("token", "filter", "description", "formula")) %>%
+    mutate(matched = !is.na(ref_row))
   
   different_df <- working_df %>%
     filter(!matched)
   
   constants_df <- different_df %>%
     select(subject_row, token, filter, description, update_formula = formula) %>%
-    left_join(., join_work_df, by = c("token", "filter", "description")) %>%
+    left_join(., join_ref_df, by = c("token", "filter", "description")) %>%
     select(token, description, filter, formula, update_formula)
   
   out_df <- filter(excel_df, sheet_name == start_with_name) %>%
@@ -94,9 +105,6 @@ make_uec <- function(input_df, template_name, subject_name, start_with_name) {
 }
 
 ```
-
-
-START HERE: debug eatout
 
 # Reductions
 ```{r reductions}
@@ -115,7 +123,19 @@ check_shopping_df <- shopping_list$differences
 eatout_list <- make_uec(excel_df, "Shopping-deprecated", "EatOut-deprecated", "Shopping")
 check_eatout_df <- eatout_list$differences
 
-df <- eatout_list$uec
+othmaint_list <- make_uec(excel_df, "Shopping-deprecated", "OthMaint-deprecated", "Shopping")
+check_othmaint_df <- othmaint_list$differences
+
+social_list <- make_uec(excel_df, "Shopping-deprecated", "Social-deprecated", "Shopping")
+check_social_df <- social_list$differences
+
+othdiscr_list <- make_uec(excel_df, "Shopping-deprecated", "OthDiscr-deprecated", "Shopping")
+check_othdiscr_df <- othdiscr_list$differences
+
+workbased_list <- make_uec(excel_df, "Shopping-deprecated", "WorkBased-deprecated", "Shopping")
+check_workbased_df <- workbased_list$differences
+
+df <- workbased_list$uec
 ```
 
 # Write to disk
@@ -125,5 +145,9 @@ write_csv(school_list$uec, file = "update-school.csv")
 write_csv(escort_list$uec, file = "update-escort.csv")
 write_csv(shopping_list$uec, file = "update-shopping.csv")
 write_csv(eatout_list$uec, file = "update-eatout.csv")
+write_csv(othmaint_list$uec, file = "update-othmaint.csv")
+write_csv(social_list$uec, file = "update-social.csv")
+write_csv(othdiscr_list$uec, file = "update-othdiscr.csv")
+write_csv(workbased_list$uec, file = "update-workbased.csv")
 ```
 
