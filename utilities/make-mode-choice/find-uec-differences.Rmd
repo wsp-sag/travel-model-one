@@ -22,7 +22,8 @@ for (package in packages_vector) {
 ```{r remote-io}
 uec_dir <- "../../model-files/model/"
 
-uec_filename <- paste0(uec_dir, "ModeChoice-for-script.xlsx")
+tour_uec_filename <- paste0(uec_dir, "ModeChoice-for-script.xlsx")
+trip_uec_filename <- paste0(uec_dir, "TripModeChoice-for-script.xlsx")
 
 output_file_name <- paste0("uec-differences.csv")
 ```
@@ -32,9 +33,8 @@ output_file_name <- paste0("uec-differences.csv")
 
 ```
 
-
-# Data Reads
-```{r read}
+# Data Reads -- Tour Mode Choice
+```{r read-tour, eval=FALSE}
 excel_df <- tibble()
 sheets <- c("Work", 
             "Shopping",
@@ -54,7 +54,7 @@ for (sheet in sheets) {
   number_alts <- if_else(str_detect(sheet, "deprecated"), 21L, 9L)
   skip_lines <- if_else(str_detect(sheet, "deprecated"), 10L, 8L)
   
-  df <- read_excel(uec_filename, 
+  df <- read_excel(tour_uec_filename, 
                       sheet = sheet, 
                       skip = skip_lines, 
                       col_names = c("row_number", "token", "description", "filter", "formula", "index", sprintf("Alt%0d", seq(1,number_alts)))) %>%
@@ -67,14 +67,51 @@ for (sheet in sheets) {
 remove(sheets, df, number_alts, skip_lines)
 ```
 
+# Data Reads -- Trip Mode Choice
+```{r read-trip, eval=TRUE}
+excel_df <- tibble()
+sheets <- c("Work", 
+            "University",
+            "Shopping",
+            "Work-deprecated", 
+            "University-deprecated", 
+            "School-deprecated", 
+            "Escort-deprecated",
+            "Shopping-deprecated",
+            "EatOut-deprecated",
+            "OthMaint-deprecated",
+            "Social-deprecated",
+            "OthDiscr-deprecated",
+            "WorkBased-deprecated"
+)
+
+for (sheet in sheets) {
+  
+  number_alts <- if_else(str_detect(sheet, "deprecated"), 21L, 9L)
+  skip_lines <- if_else(str_detect(sheet, "deprecated"), 10L, 8L)
+  
+  df <- read_excel(trip_uec_filename, 
+                      sheet = sheet, 
+                      skip = skip_lines, 
+                      col_names = c("row_number", "token", "description", "filter", "formula", "index", sprintf("Alt%0d", seq(1,number_alts)))) %>%
+    mutate(sheet_name = sheet)
+  
+  excel_df <- bind_rows(excel_df, df)
+  
+}
+
+remove(sheets, df, number_alts, skip_lines)
+```
+
+
 # Methods
 ```{r methods}
 make_uec <- function(input_df, template_name, subject_name, start_with_name) {
   
-  input_df <- excel_df
-  template_name <- "Shopping-deprecated"
-  subject_name <- "WorkBased-deprecated"
-  start_with_name <- "Shopping"
+  # input_df <- excel_df
+  # template_name <- "Shopping-deprecated"
+  # subject_name <- "WorkBased-deprecated"
+  # start_with_name <- "Shopping"
   
   join_ref_df <- filter(input_df, sheet_name == template_name) %>%
     select(ref_row = row_number, token, description, filter, formula)
@@ -113,7 +150,7 @@ check_univ_df <- univ_list$differences
 
 school_list <- make_uec(excel_df, "Work-deprecated", "School-deprecated", "Work")
 check_school_df <- school_list$differences
-
+ 
 escort_list <- make_uec(excel_df, "Work-deprecated", "Escort-deprecated", "Work")
 check_escort_df <- escort_list$differences
 
@@ -135,11 +172,11 @@ check_othdiscr_df <- othdiscr_list$differences
 workbased_list <- make_uec(excel_df, "Shopping-deprecated", "WorkBased-deprecated", "Shopping")
 check_workbased_df <- workbased_list$differences
 
-df <- workbased_list$uec
+
 ```
 
-# Write to disk
-```{r write}
+# Write to disk -- Tour
+```{r write-tour, eval=FALSE}
 write_csv(univ_list$uec, file = "update-university.csv")
 write_csv(school_list$uec, file = "update-school.csv")
 write_csv(escort_list$uec, file = "update-escort.csv")
@@ -149,5 +186,18 @@ write_csv(othmaint_list$uec, file = "update-othmaint.csv")
 write_csv(social_list$uec, file = "update-social.csv")
 write_csv(othdiscr_list$uec, file = "update-othdiscr.csv")
 write_csv(workbased_list$uec, file = "update-workbased.csv")
+```
+
+# Write to disk -- Trip
+```{r write-trip, eval=TRUE}
+write_csv(univ_list$uec, file = "update-trip-university.csv")
+write_csv(school_list$uec, file = "update-trip-school.csv")
+write_csv(escort_list$uec, file = "update-trip-escort.csv")
+write_csv(shopping_list$uec, file = "update-trip-shopping.csv")
+write_csv(eatout_list$uec, file = "update-trip-eatout.csv")
+write_csv(othmaint_list$uec, file = "update-trip-othmaint.csv")
+write_csv(social_list$uec, file = "update-trip-social.csv")
+write_csv(othdiscr_list$uec, file = "update-trip-othdiscr.csv")
+write_csv(workbased_list$uec, file = "update-trip-workbased.csv")
 ```
 
