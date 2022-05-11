@@ -26,7 +26,8 @@
     <pathelement location="${module.common-base.basedir}/lib/junit-4.1.jar"/>
     <pathelement location="${module.common-base.basedir}/lib/javadbf-0.4.0.jar"/>
     <pathelement location="${module.common-base.basedir}/lib/cajo.jar"/>
-    <pathelement location="${module.common-base.basedir}/lib/jna-4.0.0.jar"/>  	
+    <pathelement location="${module.common-base.basedir}/lib/jna-4.0.0.jar"/>  
+    <pathelement location="${module.common-base.basedir}/lib/omx.jar"/>  
     <!-- The following are not need to compile common-base and so should be moved to 'third-party' -->
     <!--
     <pathelement location="${module.common-base.basedir}/lib/or124.jar"/>

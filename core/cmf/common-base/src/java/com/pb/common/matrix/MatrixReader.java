@@ -82,6 +82,9 @@ public abstract class MatrixReader {
         else if  (type.equals(MatrixType.TPPLUS32)) { // TODO: remove once 32bit reader DLL is no longer supported
             reader = new TpplusMatrixReader( file );  
         }
+        else if  (type.equals(MatrixType.OMX)) {
+            reader = new OMXMatrixReader( file );  
+        }
         else {
             throw new MatrixException(MatrixException.INVALID_TYPE+", "+ type);
         }
@@ -130,6 +133,9 @@ public abstract class MatrixReader {
             matrix = mr.readMatrix(matrixName);
         } else if (type.equals(MatrixType.TRANSCAD)) {
             MatrixReader mr = MatrixReader.createReader(MatrixType.TRANSCAD, file);
+            matrix = mr.readMatrix(matrixName);
+        } else if (type.equals(MatrixType.OMX)) {
+            MatrixReader mr = MatrixReader.createReader(MatrixType.OMX, file);
             matrix = mr.readMatrix(matrixName);
          } else {
             throw new RuntimeException("Unsupported matrix type: " + type);
@@ -180,6 +186,10 @@ public abstract class MatrixReader {
                 fileName.indexOf(".transcad") > 0 || fileName.indexOf(".TRANSCAD") > 0)
         {
             type = MatrixType.TRANSCAD;
+        }
+        else if (fileName.indexOf(".omx") > 0 || fileName.indexOf(".OMX") > 0)
+        {
+            type = MatrixType.OMX;
         }
         else {
             throw new RuntimeException("Could not determine type of matrix file, " + file.getAbsolutePath());
