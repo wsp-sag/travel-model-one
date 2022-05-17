@@ -133,23 +133,23 @@ public class MtcModelStructure extends ModelStructure {
     // TODO: set these values from project specific code.
     public static final int ESCORT_INDEX = 3;
     
-    public static final int[] SOV_ALTS = { 1, 2 };
-    public static final int[] HOV_ALTS = { 3, 4, 5, 6 };
-    public static final int[] WALK_ALTS = { 7 };
-    public static final int[] BIKE_ALTS = { 8 };
-    public static final int[] NON_MOTORIZED_ALTS = { 7, 8 };
-    public static final int[] TRANSIT_ALTS = { 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 };
-    public static final int[] WALK_LOCAL_ALTS = { 9 };
-    public static final int[] WALK_PREMIUM_ALTS = { 10, 11, 12, 13 };
-    public static final int[] DRIVE_TRANSIT_ALTS = { 14, 15, 16, 17, 18 };
+    public static final int[] SOV_ALTS = { 1 };
+    public static final int[] HOV_ALTS = { 2, 3 };
+    public static final int[] WALK_ALTS = { 4 };
+    public static final int[] BIKE_ALTS = { 5 };
+    public static final int[] NON_MOTORIZED_ALTS = { 4, 5 };
+    public static final int[] TRANSIT_ALTS = { 6, 7, 8 };
+    public static final int[] WALK_LOCAL_ALTS = { 6 };
+    public static final int[] WALK_PREMIUM_ALTS = { 6 };
+    public static final int[] DRIVE_TRANSIT_ALTS = { 7, 8 };
     public static final int[] SCHOOL_BUS_ALTS = {};
-    public static final int[] RIDE_HAIL_ALTS = {19, 20, 21};
-    public static final int MAXIMUM_TOUR_MODE_ALT_INDEX = 21;
+    public static final int[] RIDE_HAIL_ALTS = { 9 };
+    public static final int MAXIMUM_TOUR_MODE_ALT_INDEX = 9;
 
     public static final int NUM_INCOME_CATEGORIES = 4; 
     
-    public static final int[] TRIP_SOV_ALTS = { 1, 2 };
-    public static final int[] TRIP_HOV_ALTS = { 3, 4, 5, 6 };
+    public static final int[] TRIP_SOV_ALTS = { 1 };
+    public static final int[] TRIP_HOV_ALTS = { 2, 3 };
     
 
     public static final String[] JTF_ALTERNATIVE_LABELS = { "0_tours", "1_Shop", "1_Main", "1_Eat", "1_Visit", "1_Disc", "2_SS", "2_SM", "2_SE", "2_SV", "2_SD", "2_MM", "2_ME", "2_MV", "2_MD", "2_EE", "2_EV", "2_ED", "2_VV", "2_VD", "2_DD" };
