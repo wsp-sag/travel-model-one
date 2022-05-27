@@ -238,7 +238,13 @@ public class MtcTripModeChoiceDMU extends TripModeChoiceDMU {
         return ( tazDataManager.getZoneTableIntColumn( fieldName ) );
     }
 
+    public String getPersonType() {
+        return person.getPersonType();
+    }
 
+    public int getPersonTypeNumber() {
+        return person.getPersonTypeNumber();
+    }
 
 
     private void setupMethodIndexMap() {
@@ -290,6 +296,7 @@ public class MtcTripModeChoiceDMU extends TripModeChoiceDMU {
         methodIndexMap.put("getUseOwnedAV", 41);
         methodIndexMap.put("getTourModeIsRideHail", 42 );
         methodIndexMap.put("getHhIncomeInDollars", 43);
+        methodIndexMap.put("getPersonTypeNumber", 44);
         
         
     }
@@ -345,6 +352,7 @@ public class MtcTripModeChoiceDMU extends TripModeChoiceDMU {
             case 41: return getUseOwnedAV();
             case 42: return getTourModeIsRideHail();
             case 43: return getHhIncomeInDollars();
+            case 44: return getPersonTypeNumber();
 
             default:
                 logger.error("method number = "+variableIndex+" not found");
