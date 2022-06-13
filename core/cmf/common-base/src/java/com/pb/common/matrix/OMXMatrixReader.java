@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import omx.OmxFile;
 import omx.OmxMatrix;
 import omx.OmxMatrix.OmxDoubleMatrix;
+import omx.OmxMatrix.OmxFloatMatrix;
 import omx.OmxLookup;
 
 /**
@@ -81,36 +82,64 @@ public class OMXMatrixReader extends MatrixReader {
     *
     */
     private Matrix readData(String name) {
-    	OmxMatrix.OmxDoubleMatrix omxMat = null;
+    	
     	try {
-    		omxMat = (OmxDoubleMatrix) omxFile.getMatrix(name);
-    		double[][] values = omxMat.getData();
-    		
-    		//convert to Matrix float[][]
-    		float[][] valuesFloat = new float[values.length][values[0].length];
-    		for (int i = 0 ; i < values.length; i++) {
-    			for (int j = 0 ; j < values[0].length; j++) {
-    				valuesFloat[i][j] = (float) values[i][j];
-    			}
+    		try {
+    			OmxMatrix.OmxDoubleMatrix omxMat = null;
+        		omxMat = (OmxDoubleMatrix) omxFile.getMatrix(name);
+        		double[][] values = omxMat.getData();
+        		
+        		//convert to Matrix float[][]
+        		float[][] valuesFloat = new float[values.length][values[0].length];
+        		for (int i = 0 ; i < values.length; i++) {
+        			for (int j = 0 ; j < values[0].length; j++) {
+        				valuesFloat[i][j] = (float) values[i][j];
+        			}
+        		}
+        		
+                Matrix m = new Matrix(name, name, valuesFloat);
+                
+                //set zone numbers if found
+                //CUBE - 1 to X
+                //VISUM - 'NO'
+                //EMME - 'zone number'
+                //TransCAD - ?
+                if (omxFile.getLookupNames().contains("NO")) {
+                	OmxLookup.OmxIntLookup omxZoneNums = (OmxLookup.OmxIntLookup)omxFile.getLookup("NO");
+                	m.setExternalNumbersZeroBased(omxZoneNums.getLookup());
+                }
+                if (omxFile.getLookupNames().contains("zone number")) {
+                	OmxLookup.OmxIntLookup omxZoneNums = (OmxLookup.OmxIntLookup)omxFile.getLookup("zone number");
+                	m.setExternalNumbersZeroBased(omxZoneNums.getLookup());
+                }
+                
+                return m;
+                
     		}
-    		
-            Matrix m = new Matrix(name, name, valuesFloat);
-            
-            //set zone numbers if found
-            //CUBE - 1 to X
-            //VISUM - 'NO'
-            //EMME - 'zone number'
-            //TransCAD - ?
-            if (omxFile.getLookupNames().contains("NO")) {
-            	OmxLookup.OmxIntLookup omxZoneNums = (OmxLookup.OmxIntLookup)omxFile.getLookup("NO");
-            	m.setExternalNumbersZeroBased(omxZoneNums.getLookup());
-            }
-            if (omxFile.getLookupNames().contains("zone number")) {
-            	OmxLookup.OmxIntLookup omxZoneNums = (OmxLookup.OmxIntLookup)omxFile.getLookup("zone number");
-            	m.setExternalNumbersZeroBased(omxZoneNums.getLookup());
-            }
-            
-            return m;
+    		catch (Exception e1) {
+    			
+    			OmxMatrix.OmxFloatMatrix omxMat = null;
+        		omxMat = (OmxFloatMatrix) omxFile.getMatrix(name);
+        		float[][] valuesFloat = omxMat.getData();
+        		
+        		Matrix m = new Matrix(name, name, valuesFloat);
+                
+                //set zone numbers if found
+                //CUBE - 1 to X
+                //VISUM - 'NO'
+                //EMME - 'zone number'
+                //TransCAD - ?
+                if (omxFile.getLookupNames().contains("NO")) {
+                	OmxLookup.OmxIntLookup omxZoneNums = (OmxLookup.OmxIntLookup)omxFile.getLookup("NO");
+                	m.setExternalNumbersZeroBased(omxZoneNums.getLookup());
+                }
+                if (omxFile.getLookupNames().contains("zone number")) {
+                	OmxLookup.OmxIntLookup omxZoneNums = (OmxLookup.OmxIntLookup)omxFile.getLookup("zone number");
+                	m.setExternalNumbersZeroBased(omxZoneNums.getLookup());
+                }
+                
+                return m;
+    		}  
         }
         catch (Exception e) {
             throw new MatrixException("Matrix not found: " + name);
