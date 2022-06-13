@@ -185,7 +185,14 @@ public class MtcModeChoiceDMU extends ModeChoiceDMU {
 
         return ( tazDataManager.getZoneTableIntColumn( fieldName ) );
     }
+    
+    public String getPersonType() {
+        return person.getPersonType();
+    }
 
+    public int getPersonTypeNumber() {
+        return person.getPersonTypeNumber();
+    }
 
 
     private void setupMethodIndexMap() {
@@ -231,6 +238,7 @@ public class MtcModeChoiceDMU extends ModeChoiceDMU {
         methodIndexMap.put( "getUseOwnedAV", 36);
         methodIndexMap.put( "getOrigCounty", 37);
         methodIndexMap.put( "getHhIncomeInDollars", 38);
+        methodIndexMap.put( "getPersonTypeNumber", 39);
       }
     
         
@@ -280,6 +288,7 @@ public class MtcModeChoiceDMU extends ModeChoiceDMU {
             case 36: return getUseOwnedAV();
             case 37: return getOrigCounty();
             case 38: return getHhIncomeInDollars();
+            case 39: return getPersonTypeNumber();
 
             default:
                 logger.error("method number = "+variableIndex+" not found");
