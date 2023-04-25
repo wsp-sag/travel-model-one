@@ -10,6 +10,7 @@ public class MtcDcSoaDMU extends DcSoaDMU {
 
     int[] zoneTableRow;
     int[] county;
+    int[] superDistrict;
 
 
     public MtcDcSoaDMU( TazDataIf tazDataManager ) {
@@ -24,6 +25,7 @@ public class MtcDcSoaDMU extends DcSoaDMU {
 
         // the zone table columns below returned use 0-based indexing
         county = tazDataManager.getZonalCounty();
+        superDistrict = tazDataManager.getZonalSuperDistrict();
     }
 
     
@@ -50,6 +52,8 @@ public class MtcDcSoaDMU extends DcSoaDMU {
         methodIndexMap.put( "getOriginCounty", 16 );
         // guojy: added for M. Gucwa's research on automated vehicles
         methodIndexMap.put( "getHAnalyst", 17 );
+        methodIndexMap.put( "getDestSDAlt", 18 );
+        methodIndexMap.put( "getOriginSD", 19 );
     }
     
     
@@ -126,6 +130,17 @@ public class MtcDcSoaDMU extends DcSoaDMU {
         int index = zoneTableRow[destZone] - 1;
         return county[index];
     }
+    
+    public int getOriginSuperDistrict( int alt ) {
+        int index = zoneTableRow[dmuIndex.getOriginZone()] - 1;
+        return superDistrict[index];
+    }
+
+    public int getDestSuperDistrictAlt( int alt ) {
+        int destZone = altToZone[alt];
+        int index = zoneTableRow[destZone] - 1;
+        return superDistrict[index];
+    }
 
     // guojy: added for M. Gucwa's research on automated vehicles
     public int getHAnalyst(){
@@ -155,6 +170,8 @@ public class MtcDcSoaDMU extends DcSoaDMU {
             case 16: return getOriginCounty( arrayIndex ); 
             // guojy: added for M. Gucwa's research on automated vehicles
             case 17: return getHAnalyst();
+            case 18: return getDestSuperDistrictAlt( arrayIndex );
+            case 19: return getOriginSuperDistrict( arrayIndex );
 
             default:
                 logger.error("method number = "+variableIndex+" not found");

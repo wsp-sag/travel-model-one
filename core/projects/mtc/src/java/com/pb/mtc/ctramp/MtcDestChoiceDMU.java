@@ -11,6 +11,7 @@ public class MtcDestChoiceDMU extends DestChoiceDMU {
 
     int[] zoneTableRow;
     int[] county;
+    int[] superDistrict;
 
     private int amPmlogsumIndex;
     private int amMdlogsumIndex;
@@ -31,6 +32,7 @@ public class MtcDestChoiceDMU extends DestChoiceDMU {
 
         // the zone table columns below returned use 0-based indexing
         county = tazDataManager.getZonalCounty();
+        superDistrict = tazDataManager.getZonalSuperDistrict();
 
         amPmlogsumIndex = modelStructure.getSkimPeriodCombinationIndex( modelStructure.getDefaultAmHour(), modelStructure.getDefaultPmHour() );
         amMdlogsumIndex = modelStructure.getSkimPeriodCombinationIndex( modelStructure.getDefaultAmHour(), modelStructure.getDefaultMdHour() );
@@ -47,6 +49,17 @@ public class MtcDestChoiceDMU extends DestChoiceDMU {
         int destZone = altToZone[alt];
         int index = zoneTableRow[destZone] - 1;
         return county[index];
+    }
+    
+    public int getOriginSuperDistrict() {
+        int index = zoneTableRow[dmuIndex.getOriginZone()] - 1;
+        return superDistrict[index];
+    }
+
+    public int getDestSuperDistrictAlt( int alt ) {
+        int destZone = altToZone[alt];
+        int index = zoneTableRow[destZone] - 1;
+        return superDistrict[index];
     }
     
     public void setMcLogsum( int index, int zone, int subzone, double logsum ){
@@ -116,6 +129,8 @@ public class MtcDestChoiceDMU extends DestChoiceDMU {
         // guojy: added for M. Gucwa's research on automated vehicles
         methodIndexMap.put( "getHAnalyst", 23 );
         methodIndexMap.put( "getPAnalyst", 24 );
+        methodIndexMap.put( "getOriginSD", 25 );
+        methodIndexMap.put( "getDestSDAlt", 26 );
     }
     
     
@@ -148,6 +163,8 @@ public class MtcDestChoiceDMU extends DestChoiceDMU {
             // guojy: added for M. Gucwa's research on automated vehicles
             case 23: return getHAnalyst();
             case 24: return getPAnalyst();
+            case 25: return getOriginSuperDistrict();
+            case 26: return getDestSuperDistrictAlt( arrayIndex );
 
             default:
                 logger.error("method number = "+variableIndex+" not found");
