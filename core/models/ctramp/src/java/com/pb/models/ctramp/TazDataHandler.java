@@ -58,6 +58,7 @@ public class TazDataHandler implements TazDataIf, Serializable {
     private static final String ZONE_DATA_AREATYPE_FIELD_NAME = "at";
     private static final String ZONE_DATA_DISTRICT_FIELD_NAME = "dist";
     private static final String ZONE_DATA_COUNTY_FIELD_NAME = "county";
+    private static final String ZONE_DATA_SUPER_DISTRICT_FIELD_NAME = "sd";
 
     private static final String ZONE_DATA_PARKTOT_FIELD_NAME = "parkTot";
     private static final String ZONE_DATA_PARKLNG_FIELD_NAME = "parkLong";
@@ -119,6 +120,7 @@ public class TazDataHandler implements TazDataIf, Serializable {
     protected String tazDataZoneFieldName = "";
     protected String tazDataDistFieldName= "";
     protected String tazDataCountyFieldName= "";
+    protected String tazDataSuperDistrictFieldName= "";
     protected String tazDataAtFieldName= "";
     protected String walkPctZoneFieldName= "";
     protected String walkPctShortFieldName= "";
@@ -167,6 +169,7 @@ public class TazDataHandler implements TazDataIf, Serializable {
         tazDataAtFieldName = ZONE_DATA_AREATYPE_FIELD_NAME;
         tazDataDistFieldName = ZONE_DATA_DISTRICT_FIELD_NAME;
         tazDataCountyFieldName = ZONE_DATA_COUNTY_FIELD_NAME;
+        tazDataSuperDistrictFieldName = ZONE_DATA_SUPER_DISTRICT_FIELD_NAME;
         walkPctZoneFieldName = WALK_PERCENTAGE_FILE_ZONE_FIELD_NAME;
         walkPctShortFieldName = WALK_PERCENTAGE_FILE_SHORT_FIELD_NAME;
         walkPctLongFieldName = WALK_PERCENTAGE_FILE_LONG_FIELD_NAME;
@@ -607,7 +610,17 @@ public class TazDataHandler implements TazDataIf, Serializable {
         return zoneDataTable.getColumnAsInt( countyFieldPosition );
     }
 
-    
+    /**
+     * @return super district array from the zone data table.
+     */
+    public int[] getZonalSuperDistrict () {
+        int sDFieldPosition = zoneDataTable.getColumnPosition( tazDataSuperDistrictFieldName );
+        if ( sDFieldPosition < 0 ) {
+            logger.error ( String.format("The county field name = %s defined in %s is not found as a field name in the zone data table.", tazDataSuperDistrictFieldName, this.getClass().getName() ));
+            throw new RuntimeException();
+        }
+        return zoneDataTable.getColumnAsInt( sDFieldPosition );
+    }
     
     public int getZoneIsCbd( int taz ) {
         return getZoneIsInAreaType( taz, areaTypes[cbdAreaTypesArrayIndex] );
@@ -627,6 +640,10 @@ public class TazDataHandler implements TazDataIf, Serializable {
 
     public int getZoneCounty( int taz ) {
         return (int)getZoneTableValue ( taz, tazDataCountyFieldName );
+    }
+    
+    public int getZoneSuperDistrict( int taz ) {
+        return (int)getZoneTableValue ( taz, tazDataSuperDistrictFieldName );
     }
 
     private int getZoneIsInAreaType( int taz, int[] areaTypes  ) {

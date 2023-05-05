@@ -21,6 +21,7 @@ public interface TazDataIf {
     public int getZoneIsSuburban( int taz );
     public int getZoneIsRural( int taz );
     public int getZoneCounty( int taz );
+    public int getZoneSuperDistrict( int taz );
 
     public float getPopEmpPerSqMi(int taz);
 
@@ -115,6 +116,11 @@ public interface TazDataIf {
      * @return integer county value from the zone data table for the zone index.
      */
     public int[] getZonalCounty ();
+    
+    /**
+     * @return integer super district value from the zone data table for the zone index.
+     */
+    public int[] getZonalSuperDistrict ();
 
     /**
      * @return the parking rate array

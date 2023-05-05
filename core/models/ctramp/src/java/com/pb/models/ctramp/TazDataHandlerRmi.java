@@ -192,6 +192,11 @@ public class TazDataHandlerRmi implements TazDataIf, Serializable {
         Object[] objArray = {};
         return (int[])remote.method( "getZonalCounty", objArray);
     }
+    
+    public int[] getZonalSuperDistrict () {
+        Object[] objArray = {};
+        return (int[])remote.method( "getZonalSuperDistrict", objArray);
+    }
 
     public int getZoneIsCbd( int taz ) {
         Object[] objArray = { taz };
@@ -216,6 +221,11 @@ public class TazDataHandlerRmi implements TazDataIf, Serializable {
     public int getZoneCounty( int taz ) {
         Object[] objArray = { taz };
         return (Integer)remote.method( "getZoneCounty", objArray);
+    }
+    
+    public int getZoneSuperDistrict( int taz ) {
+        Object[] objArray = { taz };
+        return (Integer)remote.method( "getZoneSuperDistrict", objArray);
     }
 
     public float getPopEmpPerSqMi(int taz) {
