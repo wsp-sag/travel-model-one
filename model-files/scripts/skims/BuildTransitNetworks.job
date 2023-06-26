@@ -50,7 +50,7 @@
 
 
 ; time period loop
-loop period = 2,2
+loop period = 1,5
 
    ; define a two-letter token for each time period
    if (period = 1)   
