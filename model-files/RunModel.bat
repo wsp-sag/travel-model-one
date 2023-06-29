@@ -116,6 +116,7 @@ echo STARTED MODEL RUN  %DATE% %TIME% >> logs\feedback.rpt
 copy INPUT\hwy\                 hwy\
 copy INPUT\trn\                 trn\
 copy INPUT\landuse\             landuse\
+copy INPUT\landuse\*.dbf             landuse\TAZDATA.dbf
 copy INPUT\popsyn\hhFile.%MODEL_YEAR%.csv              		popsyn\hhFile.%MODEL_YEAR%.csv
 copy INPUT\popsyn\personFile.%MODEL_YEAR%.csv              	popsyn\personFile.%MODEL_YEAR%.csv
 
@@ -232,7 +233,11 @@ if ERRORLEVEL 2 goto done
 :: ------------------------------------------------------------------------------------------------------
 python CTRAMP\scripts\preprocess\update_transit_line_file.py
 :: Python path specific to network management procedures
+<<<<<<< Updated upstream
 set PYTHONPATH=Z:\projects\ccta\31000190\Jawad\NetworkWrangler\NetworkWrangler-master;Z:\projects\ccta\31000190\Jawad\NetworkWrangler\NetworkWrangler-master\_static
+=======
+set PYTHONPATH=Software\NetworkWrangler\NetworkWrangler-master;Software\NetworkWrangler\NetworkWrangler-master\_static
+>>>>>>> Stashed changes
 
 ::renumber the duplicated stop ids in the transt line file
 python CTRAMP\scripts\preprocess\renumber_duplicated_transit_stops.py

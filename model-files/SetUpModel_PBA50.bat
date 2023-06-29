@@ -3,26 +3,33 @@
 :: Step 1:  Specify file locations
 ::
 :: ------------------------------------------------------------------------------------------------------
-
+set YEAR=%1
 :: set the location of the model run folder on M; this is where the input and output directories will be copied to
-set M_DIR=D:\2015_BaseY_BCM2015
+set M_DIR=D:\Projects\%YEAR%_BaseY_BCM%YEAR%
 
 :: Should strategies be included? AddStrategies=Yes for Project runs; AddStrategies=No for NoProject runs.
 set AddStrategies=Yes
 
 :: set the location of the Travel Model Release
 :: use master for now until we create a release
+<<<<<<< Updated upstream
 set GITHUB_DIR=Z:\projects\ccta\31000190\Jawad\travel-model-one
 set ALL_BCM_INPUTS=Z:\projects\ccta\31000190\BCM_Inputs
 set ALL_TEMP_INPUTS=Z:\projects\ccta\31000190\BCM_Static_Data
 
+=======
+set GITHUB_DIR=E:\projects\ccta\31000190\Jawad\travel-model-one
+set ALL_BCM_INPUTS=E:\projects\ccta\31000190\BCM_Inputs
+set ALL_TEMP_INPUTS=E:\projects\ccta\31000190\BCM_Static_Data
+set Software_Dir=E:\projects\ccta\31000190\BCM_Software
+>>>>>>> Stashed changes
 
 :: set the location of the networks (make sure the network version, year and variant are correct); currently set to the SharePoint location. 
 set INPUT_NETWORK=%ALL_BCM_INPUTS%\Base Network Externals
 set INPUT_TRN=%ALL_BCM_INPUTS%\trn
 :: set the location of the populationsim and land use inputs (make sure the land use version and year are correct) 
 ::set INPUT_POPLU=M:\Application\Model One\RTP2021\Blueprint\INPUT_DEVELOPMENT\PopSyn_n_LandUse\POPLU_v225_UBI\2050
-set INPUT_LU=%ALL_BCM_INPUTS%\FINAL 2015 LANDUSE FILES
+set INPUT_LU=%ALL_BCM_INPUTS%\FINAL %YEAR% LANDUSE FILES
 ::Latest PopulationSim results are in the Run_8 folder. 
 set INPUT_POP=%ALL_BCM_INPUTS%\INPUT_POP
 ::Inputs for the nonres models
@@ -102,11 +109,17 @@ c:\windows\system32\Robocopy.exe /E "%INPUT_NETWORK%"                           
 c:\windows\system32\Robocopy.exe /E "%INPUT_TRN%"                                        		INPUT\trn
 
 :: popsyn and land use
-c:\windows\system32\Robocopy.exe /E "%INPUT_POP%"                                       		INPUT\popsyn
+::c:\windows\system32\Robocopy.exe /E "%INPUT_POP%"                                       		INPUT\popsyn
 c:\windows\system32\Robocopy.exe /E "%INPUT_LU%"                                      			INPUT\landuse
+<<<<<<< Updated upstream
 copy "%INPUT_POP%"\hhFile2015.csv																INPUT\popsyn\hhFile.2015.csv
 copy "%INPUT_POP%"\personFile2015.csv																INPUT\popsyn\personFile.2015.csv
 c:\windows\system32\Robocopy.exe /E "%INPUT_NONRES%"                   			INPUT\nonres
+=======
+copy "%INPUT_POP%"\hhFile%YEAR%.csv																INPUT\popsyn\hhFile.%YEAR%.csv
+copy "%INPUT_POP%"\personFile%YEAR%.csv															INPUT\popsyn\personFile.%YEAR%.csv
+c:\windows\system32\Robocopy.exe /E "%INPUT_NONRES%"                   							INPUT\nonres
+>>>>>>> Stashed changes
 ::need to update the maximum telecommute rate for San Joaquin County in the telecommute_max_rate_county.csv file
 ::right now using the same values as Marin
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\utilities\telecommute"   		   INPUT\landuse
