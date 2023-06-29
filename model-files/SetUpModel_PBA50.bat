@@ -111,15 +111,11 @@ c:\windows\system32\Robocopy.exe /E "%INPUT_TRN%"                               
 :: popsyn and land use
 ::c:\windows\system32\Robocopy.exe /E "%INPUT_POP%"                                       		INPUT\popsyn
 c:\windows\system32\Robocopy.exe /E "%INPUT_LU%"                                      			INPUT\landuse
-<<<<<<< Updated upstream
-copy "%INPUT_POP%"\hhFile2015.csv																INPUT\popsyn\hhFile.2015.csv
-copy "%INPUT_POP%"\personFile2015.csv																INPUT\popsyn\personFile.2015.csv
-c:\windows\system32\Robocopy.exe /E "%INPUT_NONRES%"                   			INPUT\nonres
-=======
+
 copy "%INPUT_POP%"\hhFile%YEAR%.csv																INPUT\popsyn\hhFile.%YEAR%.csv
 copy "%INPUT_POP%"\personFile%YEAR%.csv															INPUT\popsyn\personFile.%YEAR%.csv
 c:\windows\system32\Robocopy.exe /E "%INPUT_NONRES%"                   							INPUT\nonres
->>>>>>> Stashed changes
+
 ::need to update the maximum telecommute rate for San Joaquin County in the telecommute_max_rate_county.csv file
 ::right now using the same values as Marin
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\utilities\telecommute"   		   INPUT\landuse
