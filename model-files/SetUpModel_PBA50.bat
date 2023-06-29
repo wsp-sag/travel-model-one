@@ -12,17 +12,11 @@ set AddStrategies=Yes
 
 :: set the location of the Travel Model Release
 :: use master for now until we create a release
-<<<<<<< Updated upstream
-set GITHUB_DIR=Z:\projects\ccta\31000190\Jawad\travel-model-one
-set ALL_BCM_INPUTS=Z:\projects\ccta\31000190\BCM_Inputs
-set ALL_TEMP_INPUTS=Z:\projects\ccta\31000190\BCM_Static_Data
 
-=======
 set GITHUB_DIR=E:\projects\ccta\31000190\Jawad\travel-model-one
 set ALL_BCM_INPUTS=E:\projects\ccta\31000190\BCM_Inputs
 set ALL_TEMP_INPUTS=E:\projects\ccta\31000190\BCM_Static_Data
 set Software_Dir=E:\projects\ccta\31000190\BCM_Software
->>>>>>> Stashed changes
 
 :: set the location of the networks (make sure the network version, year and variant are correct); currently set to the SharePoint location. 
 set INPUT_NETWORK=%ALL_BCM_INPUTS%\Base Network Externals
@@ -81,6 +75,7 @@ c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\model-files\model"       CTRAM
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\model-files\runtime"     CTRAMP\runtime
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\model-files\scripts"     CTRAMP\scripts
 c:\windows\system32\Robocopy.exe /E "%GITHUB_DIR%\utilities\RTP\metrics"   CTRAMP\scripts\metrics
+c:\windows\system32\Robocopy.exe /E "%Software_Dir%"       				   Software
 copy /Y "%GITHUB_DIR%\utilities\monitoring\notify_slack.py"                CTRAMP\scripts
 copy /Y "%GITHUB_DIR%\model-files\RunIteration.bat"                        CTRAMP
 copy /Y "%GITHUB_DIR%\model-files\RunModel.bat"                            .
