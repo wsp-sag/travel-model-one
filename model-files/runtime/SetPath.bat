@@ -10,7 +10,7 @@ if %computername%==MODEL2-C      (  set COMMPATH=E:\Model2C-Share\COMMPATH)
 if %computername%==MODEL2-D      (  set COMMPATH=E:\Model2D-Share\COMMPATH)
 
 :: The location of the 64-bit java development kit
-set JAVA_PATH=C:\Program Files\Java\jdk1.8.0_162
+set JAVA_PATH=%MODEL_DIR%\Software\jdk1.8.0_162
 
 :: The location of the GAWK binary executable files
 set GAWK_PATH=Z:\projects\ccta\31000190\R\GnuWin32
