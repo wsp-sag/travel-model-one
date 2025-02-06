@@ -19,11 +19,11 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
 ;start cluster nodes
-*Cluster.exe ctramp 1-5 start exit
+	
+  
 
 ; do, more or less, the same skim procedure for each of the five time periods
 loop period = 1, 5
-  
    ; a two letter token is used for each time period
    if (period = 1)   
       token_period = 'EA'
@@ -44,8 +44,12 @@ loop period = 1, 5
     node_start = 1000000 ;all tazs or mazs can fit beneath this
     ;tazs include external stations (900,000 - 1,000,000)
     taz_selector = '(N < 1000000)'
+	;run zoneSystem.bat script
+	* %MODEL_DIR%\zoneSystem.bat
+	IF (RETURNCODE > 0) abort
+	;token_taz_count = %TAZ_COUNT%
 	;max zones
-	taz_count = %TAZ_EXTS_COUNT%
+	;taz_count = %TAZ_COUNT%
     
     ;create sequential taz numbers
     RUN PGM=NETWORK
@@ -97,7 +101,7 @@ loop period = 1, 5
 ;        PAR NODES=10000000
         NETI = hwy\temp2@token_period@.net
         NETO = hwy\avgload@token_period@_complete.net
-        ZONES = @TAZ_COUNT@
+        ;ZONES = %TAZ_COUNT%
     ENDRUN
 
     ;filter roadway that is not used in highway assignment
@@ -107,7 +111,11 @@ loop period = 1, 5
         NETO = hwy\avgload@token_period@_taz.net
 
         PHASE = LINKMERGE
-		IF ((COUNTY = 'Alameda' | COUNTY ='Contra Costa') | COUNTY = 'San Joaquin')
+		IF (RAIL_ONLY = 1) 
+			DELETE
+		ELSEIF (HAS_TRANSIT = 1)
+			;keep record
+		ELSEIF ((COUNTY = 'Alameda' | COUNTY ='Contra Costa') | COUNTY = 'San Joaquin')
 			IF ((CNTYPE='TAZ' | CNTYPE='TANA') && (FT <>99 ))
 				;keep record
 			ELSE
@@ -176,7 +184,7 @@ loop period = 1, 5
     ;    NODEI[2] = hwy\@token_period@_exts_node.csv VAR=N,X,Y,OLD_NODE
     ;    LINKI[2] = hwy\@token_period@_exts_link.csv VAR=A,B,CNTYPE(C),FEET,OLD_A,OLD_B
     ;    NETO = hwy\avgload@token_period@_taz_exts.net
-    ;    ZONES = %TAZ_EXTS_COUNT%
+    ;    ZONES = 6626
     ;ENDRUN
     
     *del hwy\temp@token_period@.net
@@ -188,5 +196,3 @@ endloop ; token_period
 
 Wait4Files files = ctramp1.script.end, ctramp2.script.end, ctramp3.script.end, ctramp4.script.end, ctramp5.script.end, 
            printfiles = merge, deldistribfiles = t, CheckReturnCode = t
-;stop cluster nodes
-*Cluster.exe ctramp 1-5 close exit
